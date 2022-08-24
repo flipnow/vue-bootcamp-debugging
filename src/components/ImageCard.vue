@@ -23,7 +23,11 @@ const isImageLoaded = ref(false);
       }"
     >
       <OpacityTransition>
-        <img :src="image.downloadUrl" />
+        <img
+          :src="image.downloadUrl"
+          isImageLoaded
+          @load="isImageLoaded = true"
+        />
       </OpacityTransition>
     </div>
     <div class="image-card__content">

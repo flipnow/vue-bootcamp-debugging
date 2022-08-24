@@ -38,10 +38,6 @@ export const useImagesStore = defineStore('imagesStore', () => {
           blur && blur > 0 ? `blur=${blur}` : ''
         }`
       );
-      // image.value = {
-      //   id: response.headers['picsum-id'],
-      //   downloadUrl: response.request.responseURL,
-      // };
       image.value = {
         id: data.id,
         downloadUrl: data.url,

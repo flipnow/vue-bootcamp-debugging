@@ -9,7 +9,6 @@
 <style scoped lang="scss">
 .images-grid {
   display: flex;
-  // flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
 }

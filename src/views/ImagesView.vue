@@ -6,16 +6,11 @@ import { ElInputNumber, ElButton } from 'element-plus';
 import ImagesGrid from '../components/ImagesGrid.vue';
 import ImageCard from '../components/ImageCard.vue';
 import { faker } from '@faker-js/faker';
-import { debounce } from 'lodash';
 import type { OrientationType } from '@/types/OrientationType';
-import CounterButton from '../components/CounterButton.vue';
 
 const imagesStore = useImagesStore();
 const { images, limit, loadingImages } = storeToRefs(imagesStore);
 const orientation = ref<OrientationType>('landscape-primary');
-// let handle: ReturnType<typeof setTimeout> | undefined;
-
-const handleResize = debounce(imagesStore.loadImages, 500);
 
 onMounted(() => {
   imagesStore.loadImages();
@@ -28,16 +23,10 @@ onMounted(() => {
     console.table(mapped);
   }, 1000000);
 
-  window.addEventListener('resize', handleResize);
   screen.orientation.addEventListener('change', () => {
     const { type } = screen.orientation;
     orientation.value = type;
   });
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize);
-  // clearTimeout(handle);
 });
 
 const handleAnonymise = () => {
@@ -51,6 +40,7 @@ const handleAnonymise = () => {
   <div class="images-view">
     <div class="images-view__controls">
       <div class="images-view__limit">
+        <ElButton @click="handleAnonymise">Anonymize</ElButton>
         <ElInputNumber v-model="limit" :min="1" :max="20" />
         <ElButton
           type="primary"
@@ -59,8 +49,6 @@ const handleAnonymise = () => {
         >
           Load new
         </ElButton>
-        <ElButton @click="handleAnonymise">Anonymize</ElButton>
-        <CounterButton />
       </div>
     </div>
     <ImagesGrid>
