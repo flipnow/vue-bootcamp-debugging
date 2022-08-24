@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 import axios from 'axios';
 import type { ImageBaseInfo, ImageInfo } from '@/types/ImageInfo';
 
 export const useImagesStore = defineStore('imagesStore', () => {
-  const images = ref<ImageInfo[]>([]);
+  const images = shallowRef<ImageInfo[]>([]);
   const image = ref<ImageBaseInfo | null>(null);
-  const limit = ref(10);
+  const limit = ref(3);
   const loadingImage = ref(false);
 
   const loadImages = async () => {
@@ -25,14 +25,18 @@ export const useImagesStore = defineStore('imagesStore', () => {
   ) => {
     try {
       loadingImage.value = true;
-      const response = await axios.get(
-        `https://picsum.photos/${id ? `id/${id}` : ''}/200/300?${
-          gray ? `grayscale&` : ''
-        }${blur && blur > 0 ? `blur=${blur}` : ''}`
+      const { data } = await axios.get(
+        `https://picsum.photos/id/${id}/200/300?${gray ? `grayscale&` : ''}${
+          blur && blur > 0 ? `blur=${blur}` : ''
+        }`
       );
+      // image.value = {
+      //   id: response.headers['picsum-id'],
+      //   downloadUrl: response.request.responseURL,
+      // };
       image.value = {
-        id: response.headers['picsum-id'],
-        download_url: response.request.responseURL,
+        id: data.id,
+        downloadUrl: data.url,
       };
     } catch (error) {
       console.error(error);

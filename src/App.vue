@@ -39,6 +39,10 @@ import { ElContainer, ElHeader, ElMain } from 'element-plus';
     display: flex;
     column-gap: 16px;
     margin-left: 32px;
+
+    a {
+      color: blue;
+    }
   }
 }
 </style>

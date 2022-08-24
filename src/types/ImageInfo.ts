@@ -1,6 +1,6 @@
 export type ImageBaseInfo = {
   id: string;
-  download_url: string;
+  downloadUrl: string;
 };
 
 export type ImageInfo = ImageBaseInfo & {

@@ -23,7 +23,7 @@ onMounted(() => {
 
 <template>
   <div class="image-view">
-    <img :src="image?.download_url" class="image" width="600" height="400" />
+    <img :src="image?.downloadUrl" class="image" width="600" height="400" />
     <div class="image-view__controls">
       <ElSwitch v-model="isGray" active-text="Gray" inactive-text="Color" />
       <ElSlider

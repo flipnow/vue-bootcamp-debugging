@@ -9,7 +9,7 @@ import { ElLink } from 'element-plus';
 </template>
 
 <style scoped lang="scss">
-:deep(.el-link) {
+.el-link:focus-visible {
   outline: auto;
 }
 </style>
