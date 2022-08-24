@@ -2,23 +2,30 @@
 import type { ImageInfo } from '@/types/ImageInfo';
 import type { OrientationType } from '@/types/OrientationType';
 import { ElCard, ElTag } from 'element-plus';
+import { ref } from 'vue';
 import BaseLink from './BaseLink.vue';
+import OpacityTransition from './OpacityTransition.vue';
 
 defineProps<{
   image: ImageInfo;
   orientation?: OrientationType;
 }>();
+
+const isImageLoaded = ref(false);
 </script>
 
 <template>
   <ElCard @click="$router.push({ name: 'image' })">
-    <img
-      :src="image.downloadUrl"
+    <div
       :class="{
         'image-card__preview': true,
         'image-card__preview--portrait': orientation === 'portrait-primary',
       }"
-    />
+    >
+      <OpacityTransition>
+        <img :src="image.downloadUrl" />
+      </OpacityTransition>
+    </div>
     <div class="image-card__content">
       <span>{{ image.author }}</span>
       <ElTag type="info">{{ `${image.width} x ${image.height}` }}</ElTag>
@@ -38,6 +45,11 @@ defineProps<{
     &--portrait {
       width: 200px;
       height: 300px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 

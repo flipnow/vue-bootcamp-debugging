@@ -11,7 +11,7 @@ import type { OrientationType } from '@/types/OrientationType';
 import CounterButton from '../components/CounterButton.vue';
 
 const imagesStore = useImagesStore();
-const { images, limit } = storeToRefs(imagesStore);
+const { images, limit, loadingImages } = storeToRefs(imagesStore);
 const orientation = ref<OrientationType>('landscape-primary');
 // let handle: ReturnType<typeof setTimeout> | undefined;
 
@@ -52,10 +52,14 @@ const handleAnonymise = () => {
     <div class="images-view__controls">
       <div class="images-view__limit">
         <ElInputNumber v-model="limit" :min="1" :max="20" />
-        <ElButton type="primary" @click="imagesStore.loadImages">
+        <ElButton
+          type="primary"
+          @click="imagesStore.loadImages"
+          :loading="loadingImages"
+        >
           Load new
         </ElButton>
-        <ElButton @click="handleAnonymise">Anonymise</ElButton>
+        <ElButton @click="handleAnonymise">Anonymize</ElButton>
         <CounterButton />
       </div>
     </div>
@@ -81,6 +85,7 @@ const handleAnonymise = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 16px 0;
   }
 
   &__limit {
