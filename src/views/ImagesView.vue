@@ -15,10 +15,13 @@ const orientation = ref<OrientationType>('landscape-primary');
 onMounted(() => {
   imagesStore.loadImages();
 
-  const mapped = [...Array(25000)].map(() => ({
-    id: faker.datatype.uuid(),
-    text: faker.lorem.lines(),
-  }));
+  const mapped = [...Array(25000)].map(() => {
+    const id = faker.datatype.number();
+    return {
+      id,
+      text: faker.lorem.lines(),
+    };
+  });
   setTimeout(() => {
     console.table(mapped);
   }, 1000000);
