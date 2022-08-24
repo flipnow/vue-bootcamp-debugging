@@ -7,10 +7,11 @@ import ImagesGrid from '../components/ImagesGrid.vue';
 import ImageCard from '../components/ImageCard.vue';
 
 const imagesStore = useImagesStore();
-const { images, limit } = storeToRefs(imagesStore);
+const { images, limit, loadingImages } = storeToRefs(imagesStore);
 
-onMounted(() => {
-  imagesStore.loadImages();
+onMounted(async () => {
+  console.log('Images view mounted');
+  await imagesStore.loadImages();
 });
 </script>
 
@@ -19,7 +20,11 @@ onMounted(() => {
     <div class="images-view__controls">
       <div class="images-view__limit">
         <ElInputNumber v-model="limit" :min="1" :max="20" />
-        <ElButton type="primary" @click="imagesStore.loadImages">
+        <ElButton
+          type="primary"
+          @click="imagesStore.loadImages"
+          :loading="loadingImages"
+        >
           Load new
         </ElButton>
       </div>
@@ -40,6 +45,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 16px 0;
   }
 
   &__limit {

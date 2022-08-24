@@ -5,17 +5,25 @@ import type { ImageBaseInfo, ImageInfo } from '@/types/ImageInfo';
 
 export const useImagesStore = defineStore('imagesStore', () => {
   const images = ref<ImageInfo[]>([]);
+  const loadingImages = ref(false);
   const image = ref<ImageBaseInfo | null>(null);
   const limit = ref(10);
   const loadingImage = ref(false);
 
   const loadImages = async () => {
-    const { data } = await axios.get(
-      `https://picsum.photos/v2/list?limit=${limit.value}&page=${Math.floor(
-        Math.random() * 50
-      )}`
-    );
-    images.value = data;
+    try {
+      loadingImages.value = true;
+      const { data } = await axios.get(
+        `https://picsum.photos/v2/list?limit=${limit.value}&page=${Math.floor(
+          Math.random() * 50
+        )}`
+      );
+      images.value = data;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loadingImages.value = false;
+    }
   };
 
   const loadImage = async (
@@ -42,10 +50,13 @@ export const useImagesStore = defineStore('imagesStore', () => {
   };
 
   return {
+    loadingImages,
     images,
     limit,
     loadImages,
-    image,
+
     loadImage,
+    image,
+    loadingImage,
   };
 });

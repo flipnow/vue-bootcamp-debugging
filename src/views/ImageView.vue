@@ -4,12 +4,14 @@ import { ElButton, ElSwitch, ElSlider } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import OpacityTransition from '../components/OpacityTransition.vue';
 
 const imagesStore = useImagesStore();
-const { image } = storeToRefs(imagesStore);
+const { image, loadingImage } = storeToRefs(imagesStore);
 
 const route = useRoute();
 
+const isImageLoaded = ref(false);
 const isGray = ref(false);
 const blur = ref(0);
 
@@ -23,7 +25,18 @@ onMounted(() => {
 
 <template>
   <div class="image-view">
-    <img :src="image?.download_url" class="image" width="600" height="400" />
+    <div class="image-view__preview">
+      <OpacityTransition>
+        <img
+          :src="image?.download_url"
+          class="image"
+          width="600"
+          height="400"
+          @load="isImageLoaded = true"
+          v-show="isImageLoaded"
+        />
+      </OpacityTransition>
+    </div>
     <div class="image-view__controls">
       <ElSwitch v-model="isGray" active-text="Gray" inactive-text="Color" />
       <ElSlider
@@ -35,7 +48,10 @@ onMounted(() => {
         :marks="{ 0: 'No blur', 10: 'Max blur' }"
         class="image-view__slider"
       />
-      <ElButton @click="imagesStore.loadImage(image?.id || '', isGray, blur)">
+      <ElButton
+        @click="imagesStore.loadImage(image?.id || '', isGray, blur)"
+        :loading="loadingImage"
+      >
         Load
       </ElButton>
     </div>
@@ -44,6 +60,20 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .image-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__preview {
+    width: 600px;
+    height: 400px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
   &__controls {
     display: flex;
     column-gap: 12px;
@@ -51,7 +81,7 @@ onMounted(() => {
   }
 
   &__slider {
-    max-width: 384px;
+    width: 384px;
     padding: 0 32px;
 
     :deep(.el-slider__marks) {
