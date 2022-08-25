@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import type { ImageInfo } from '@/types/ImageInfo';
 import { ElCard, ElTag } from 'element-plus';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import BaseLink from './BaseLink.vue';
 import OpacityTransition from './OpacityTransition.vue';
 
-defineProps<{
+const props = defineProps<{
   image: ImageInfo;
 }>();
 
 const isImageLoaded = ref(false);
+
+const tagContent = computed(() => {
+  return `${props.image.width} x ${props.image.height}`;
+});
 </script>
 
 <template>
@@ -26,7 +30,7 @@ const isImageLoaded = ref(false);
       </div>
       <div class="image-card__content">
         <span>{{ image.author }}</span>
-        <ElTag type="info">{{ `${image.width} x ${image.height}` }}</ElTag>
+        <ElTag type="info">{{ tagContent }}</ElTag>
       </div>
       <div class="image-card__footer">
         <BaseLink :href="image.url">View image origin</BaseLink>
