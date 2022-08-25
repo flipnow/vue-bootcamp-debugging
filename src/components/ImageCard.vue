@@ -25,7 +25,7 @@ const isImageLoaded = ref(false);
       <OpacityTransition>
         <img
           :src="image.downloadUrl"
-          isImageLoaded
+          v-show="isImageLoaded"
           @load="isImageLoaded = true"
         />
       </OpacityTransition>
